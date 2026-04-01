@@ -20,7 +20,7 @@ import java.util.List;
 public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer role_id;
+    private Integer id;
 
 @OneToMany(mappedBy = "role")
 private List<User> userList;

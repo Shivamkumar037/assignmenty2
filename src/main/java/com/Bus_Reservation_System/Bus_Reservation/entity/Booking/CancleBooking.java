@@ -1,47 +1,41 @@
 package com.Bus_Reservation_System.Bus_Reservation.entity.Booking;
 
 import com.Bus_Reservation_System.Bus_Reservation.entity.BusSystem.Passanger;
-import com.Bus_Reservation_System.Bus_Reservation.entity.Schedule.BusSchedule;
 import com.Bus_Reservation_System.Bus_Reservation.entity.User;
 import com.Bus_Reservation_System.Bus_Reservation.entity.type.BookingStatus;
-import com.Bus_Reservation_System.Bus_Reservation.entity.type.Day;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalTime;
+import java.util.Date;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Booking {
+public class CancleBooking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Enumerated(EnumType.STRING)
-    private Day bookingDay;
-
-    private LocalDate bookingDate;
-   @Enumerated(EnumType.STRING)
+    @OneToOne
+    @JoinColumn(name = "paymentId")
+    private Payment payment;
+    private String reason;
+    private Date date;
+    private LocalTime time;
     private BookingStatus status;
 
-    @ManyToOne
-    @Column(name = "schedule_id")
-    private BusSchedule busSchedule;
+    private  double refound;
 
     @ManyToOne
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @Column(name = "payment_id")
-    private Payment payment;
+    private Passanger passanger;
 
-    @OneToMany(mappedBy = "passanger")
-    private List<Passanger> passangers;
 }

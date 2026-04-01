@@ -1,11 +1,9 @@
 package com.Bus_Reservation_System.Bus_Reservation.entity.BusSystem;
 
 import com.Bus_Reservation_System.Bus_Reservation.entity.Schedule.BusSchedule;
+import com.Bus_Reservation_System.Bus_Reservation.entity.User;
 import com.Bus_Reservation_System.Bus_Reservation.entity.type.Bustype;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,36 +14,27 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@Valid
+@NoArgsConstructor
 public class Bus {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer bus_id;
 
-    @NotBlank
-    private String bus_number;
+    private Integer id;
+    @Column(unique = true)
+    private String busNo;
+    private Bustype bustype;
+    private Integer totalSeats;
+    private boolean status=true;
+    @ManyToOne
+    @Column(name = "driver_Id")
+    private User drivar;
+    @ManyToOne
+    @Column(name = "conductor_Id")
+    private User conductor;
 
-    @NotBlank
-    private Bustype bus_type;
-
-    @NotNull
-    private Integer total_seat;
-
-    private boolean status = true;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bus_operater")
-    private BusOperater busOperater;
-
-    @OneToMany(mappedBy = "bus", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private List<BusSchedule> busScheduleList;
-
-    public  boolean getStatus(){
-        return this.status;
-    }
-
+    @OneToMany(mappedBy = "bus")
+    private List<Seat> seatList;
+    @OneToMany(mappedBy = "bus")
+    private List<BusSchedule> busSchedules;
 }

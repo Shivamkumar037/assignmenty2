@@ -6,15 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface RouteRepo extends JpaRepository<Route,Integer> {
 
     List<Route> getRoutesBySourceAndDestination(Integer sourceCityId, Integer destinationCityId);
 
-    List<Route> findAllBySource(String city);
 
-    List<Route> findAllBySource(City sourceCity);
 
 }

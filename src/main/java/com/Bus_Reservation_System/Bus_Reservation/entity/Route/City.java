@@ -1,9 +1,6 @@
 package com.Bus_Reservation_System.Bus_Reservation.entity.Route;
 
-
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,22 +11,16 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@Valid
+@NoArgsConstructor
 public class City {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer city_id;
-
-    @NotBlank
-    private String city;
-
-    @NotBlank
+    private Integer id;
+    private String name;
     private String state;
-
-    @OneToMany(mappedBy = "stop", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private List<Stop_Ctiy> stopCtiyList;
+    @OneToMany(mappedBy = "source")
+    private List<Route> sourceRoute;
+    @OneToMany(mappedBy = "destination")
+    private List<Route> destimationRoute;
 }
