@@ -16,8 +16,8 @@ public class Otp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-@ManyToOne
-    @Column(name = "userId")
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "userId")
     private User user;
 private String otp;
 }

@@ -12,8 +12,7 @@ import java.util.Optional;
 @Repository
 public interface UserReop extends JpaRepository<User, Integer> {
 
-   Optional<User> findByUsername(@NotBlank(message = "Username is required") String username);
+    Optional<User> findByUsername(String username);
 
-    boolean existsByUsername(@NotBlank(message = "Username is required") String username);
-
+    Optional<User> findByEmail(String email);
 }

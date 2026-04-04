@@ -19,11 +19,11 @@ public class Stop {
     private  String stopName;
     @NonNull
     private double distanceFromSource;
-    @NotNull
-    private double price;
 
-    @ManyToOne
-    @Column(name = "route_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "route_id")
     private Route route;
 
 }
+
+

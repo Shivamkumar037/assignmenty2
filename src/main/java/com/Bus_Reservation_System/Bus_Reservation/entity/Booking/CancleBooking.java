@@ -1,6 +1,7 @@
 package com.Bus_Reservation_System.Bus_Reservation.entity.Booking;
 
 import com.Bus_Reservation_System.Bus_Reservation.entity.BusSystem.Passanger;
+import com.Bus_Reservation_System.Bus_Reservation.entity.Schedule.BusSchedule;
 import com.Bus_Reservation_System.Bus_Reservation.entity.User;
 import com.Bus_Reservation_System.Bus_Reservation.entity.type.BookingStatus;
 import jakarta.persistence.*;
@@ -21,7 +22,7 @@ public class CancleBooking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "paymentId")
     private Payment payment;
     private String reason;
@@ -30,12 +31,19 @@ public class CancleBooking {
     private BookingStatus status;
 
     private  double refound;
+@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+@JoinColumn(name = "booking_id")
+private Booking booking;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+@JoinColumn(name = "schedule_id")
+private BusSchedule busSchedule;
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "passanger_id")
     private Passanger passanger;
 
 }

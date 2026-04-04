@@ -1,5 +1,6 @@
 package com.Bus_Reservation_System.Bus_Reservation.entity;
 
+import com.Bus_Reservation_System.Bus_Reservation.entity.Booking.Booking;
 import com.Bus_Reservation_System.Bus_Reservation.entity.type.RoleType;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -22,19 +23,16 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-@OneToMany(mappedBy = "role")
-private List<User> userList;
 
     @Enumerated(value = EnumType.STRING)
     private RoleType role= RoleType.PASSENGER;
 
 
     @OneToMany(mappedBy = "role")
-    private List<User> user ;
-
+    List<User> userList;
 
     @Override
     public @Nullable String getAuthority() {
-        return this.role.toString();
+        return this.role.name();
     }
 }

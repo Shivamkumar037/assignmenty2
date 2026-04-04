@@ -20,11 +20,11 @@ public class SeatAvailability {
 
     private boolean isAvailable= true;
     private Integer seatNo;
-    @ManyToOne
-    @Column(name = "seat_no")
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "seat_Id")
     private  Seat seat;
 
-    @ManyToOne
-    @Column(name = "schedule_id")
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "schedule_id")
     private BusSchedule busSchedule;
 }

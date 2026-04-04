@@ -30,18 +30,18 @@ public class Booking {
    @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
-    @ManyToOne
-    @Column(name = "schedule_id")
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "schedule_id")
     private BusSchedule busSchedule;
 
     @ManyToOne
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @Column(name = "payment_id")
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_id")
     private Payment payment;
 
-    @OneToMany(mappedBy = "passanger")
+    @OneToMany(mappedBy = "booking")
     private List<Passanger> passangers;
 }

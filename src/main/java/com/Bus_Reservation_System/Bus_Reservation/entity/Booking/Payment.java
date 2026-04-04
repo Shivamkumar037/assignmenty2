@@ -25,6 +25,6 @@ public class Payment {
     @OneToMany(mappedBy = "payment")
     private List<Booking> bookings;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private CancleBooking cancleBooking;
 }

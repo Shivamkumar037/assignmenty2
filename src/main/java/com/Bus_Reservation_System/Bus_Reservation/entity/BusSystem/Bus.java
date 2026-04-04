@@ -26,12 +26,16 @@ public class Bus {
     private Bustype bustype;
     private Integer totalSeats;
     private boolean status=true;
-    @ManyToOne
-    @Column(name = "driver_Id")
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "driver_Id")
     private User drivar;
-    @ManyToOne
-    @Column(name = "conductor_Id")
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "conductor_Id")
     private User conductor;
+
+    public boolean isStatus() {
+        return status;
+    }
 
     @OneToMany(mappedBy = "bus")
     private List<Seat> seatList;

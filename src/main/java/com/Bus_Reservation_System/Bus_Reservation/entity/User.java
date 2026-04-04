@@ -46,13 +46,12 @@ public class User implements UserDetails {
 
     @NotBlank
     private String  password;
-    private boolean status = true;
     private LocalDate dob;
-    private boolean isActive=false;
-    private boolean isVerified;
+    private boolean isActive=true;
+    private boolean isVerified=false;
     private String aadhar;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role;
 @OneToMany(mappedBy = "drivar")

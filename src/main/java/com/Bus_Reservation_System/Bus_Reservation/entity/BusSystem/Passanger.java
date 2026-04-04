@@ -24,14 +24,14 @@ public class Passanger {
      private String address;
      private String phone;
 
-     @ManyToOne
-    @Column(name = "seat_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seat_id")
     private  Seat seat;
 
-    @ManyToOne
-    @Column(name = "bookingId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bookingId")
     private Booking booking;
 @OneToMany(mappedBy = "passanger")
-    private CancleBooking cancleBooking;
+    private List<CancleBooking>  cancleBooking;
 
 }

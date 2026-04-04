@@ -20,17 +20,17 @@ public class Route {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @Column(name = "source_cityId")
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "source_cityId")
     private City source;
 
-    @ManyToOne
-    @Column(name = "destination_cityId")
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "destination_cityId")
     private City destination;
 
     private  double distance;
 
-    private double price;
+    private double priceprkm;
 
     @OneToMany(mappedBy = "route")
    private List<Stop> stops;

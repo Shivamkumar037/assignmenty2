@@ -19,8 +19,8 @@ public class Seat {
     private Integer id;
     private SeatType seatType;
     private Integer seatNo;
-    @ManyToOne
-    @Column(name = "bus_id")
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "bus_id")
     private Bus bus;
 
     @OneToMany(mappedBy = "seat")
