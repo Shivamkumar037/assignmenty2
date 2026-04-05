@@ -9,10 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-/**
- * Refund Entity
- * Represents refund transactions
- */
+
 @Entity
 @Table(name = "refund")
 @Data

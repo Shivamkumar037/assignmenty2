@@ -9,10 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-/**
- * City Entity
- * Represents cities for routes
- */
+
 @Entity
 @Table(name = "city")
 @Data

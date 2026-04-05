@@ -9,10 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-/**
- * OTP Entity
- * Stores OTP for email verification
- */
+
 @Entity
 @Table(name = "otp")
 @Data

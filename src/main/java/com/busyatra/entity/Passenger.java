@@ -9,10 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-/**
- * Passenger Entity
- * Represents passengers in a booking
- */
+
 @Entity
 @Table(name = "passenger")
 @Data

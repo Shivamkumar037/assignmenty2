@@ -10,10 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Cancellation Entity
- * Represents booking cancellations
- */
+
 @Entity
 @Table(name = "cancellation")
 @Data

@@ -12,10 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-/**
- * Schedule Entity
- * Represents bus schedules for routes
- */
 @Entity
 @Table(name = "schedule")
 @Data

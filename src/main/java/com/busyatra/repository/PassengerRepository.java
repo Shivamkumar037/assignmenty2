@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * Repository for Passenger entity
- */
+
 @Repository
 public interface PassengerRepository extends JpaRepository<Passenger, Long> {
     

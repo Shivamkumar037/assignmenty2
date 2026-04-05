@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Admin Controller
- * Handles admin-specific operations
- */
+
 @RestController
 @RequestMapping("/admin")
 @PreAuthorize("hasRole('ADMIN')")
@@ -36,9 +33,7 @@ public class AdminController {
     @Autowired
     private CancellationService cancellationService;
 
-    /**
-     * Add new bus
-     */
+
     @PostMapping("/add-bus")
     public ResponseEntity<ApiResponse> addBus(@Valid @RequestBody AddBusRequest request) {
         Bus bus = busService.addBus(request);
@@ -48,18 +43,13 @@ public class AdminController {
         );
     }
 
-    /**
-     * Get all buses
-     */
+
     @GetMapping("/buses")
     public ResponseEntity<List<Bus>> getAllBuses() {
         List<Bus> buses = busService.getAllBuses();
         return ResponseEntity.ok(buses);
     }
 
-    /**
-     * Add new route
-     */
     @PostMapping("/add-route")
     public ResponseEntity<ApiResponse> addRoute(@Valid @RequestBody AddRouteRequest request) {
         Route route = routeService.addRoute(request);
@@ -69,9 +59,7 @@ public class AdminController {
         );
     }
 
-    /**
-     * Add stop to route
-     */
+
     @PostMapping("/add-stop")
     public ResponseEntity<ApiResponse> addStop(@Valid @RequestBody AddStopRequest request) {
         Stop stop = routeService.addStop(request);
@@ -81,9 +69,7 @@ public class AdminController {
         );
     }
 
-    /**
-     * Create schedule
-     */
+
     @PostMapping("/create-schedule")
     public ResponseEntity<ApiResponse> createSchedule(@Valid @RequestBody CreateScheduleRequest request) {
         Schedule schedule = scheduleService.createSchedule(request);
@@ -93,9 +79,7 @@ public class AdminController {
         );
     }
 
-    /**
-     * Get all bookings
-     */
+
     @GetMapping("/bookings")
     public ResponseEntity<ApiResponse> getAllBookings() {
         // This would need a method in BookingService to get all bookings
@@ -104,9 +88,7 @@ public class AdminController {
         );
     }
 
-    /**
-     * Process refund
-     */
+
     @PostMapping("/process-refund")
     public ResponseEntity<ApiResponse> processRefund(
             @RequestParam Long refundId,
@@ -117,9 +99,7 @@ public class AdminController {
         );
     }
 
-    /**
-     * Update bus status
-     */
+
     @PutMapping("/bus/{busId}/status")
     public ResponseEntity<ApiResponse> updateBusStatus(
             @PathVariable Long busId,

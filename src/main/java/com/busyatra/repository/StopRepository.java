@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * Repository for Stop entity
- */
+
 @Repository
 public interface StopRepository extends JpaRepository<Stop, Long> {
     

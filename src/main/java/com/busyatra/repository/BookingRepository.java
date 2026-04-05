@@ -8,9 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repository for Booking entity
- */
+
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     

@@ -9,10 +9,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-/**
- * Bus Entity
- * Represents buses in the system
- */
 @Entity
 @Table(name = "bus")
 @Data

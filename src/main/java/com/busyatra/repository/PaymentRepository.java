@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/**
- * Repository for Payment entity
- */
+
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
     

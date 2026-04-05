@@ -9,14 +9,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-/**
- * SeatAvailability Entity
- * Tracks seat availability for each schedule
- */
+
 @Entity
-@Table(name = "seat_availability", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"schedule_id", "seat_id"})
-})
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

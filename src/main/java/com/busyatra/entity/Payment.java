@@ -10,10 +10,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Payment Entity
- * Represents payment transactions
- */
 @Entity
 @Table(name = "payment")
 @Data

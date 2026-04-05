@@ -9,9 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repository for OTP entity
- */
+
 @Repository
 public interface OtpRepository extends JpaRepository<Otp, Long> {
     

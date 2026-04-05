@@ -1,18 +1,12 @@
 package com.busyatra.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-/**
- * User Entity
- * Represents all users in the system
- */
 @Entity
 @Table(name = "user")
 @Data
@@ -25,11 +19,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 100)
-    private String name;
+@Column(name = "name",nullable = false,length = 100)
+private String name;
 
-    @Column(name = "email", unique = true, nullable = false, length = 100)
-    private String email;
+@Column(name = "email",unique = true,length = 100)
+private String email;
 
     @Column(name = "password", nullable = false)
     private String password;

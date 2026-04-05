@@ -9,14 +9,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-/**
- * Seat Entity
- * Represents seats in a bus
- */
+
 @Entity
-@Table(name = "seat", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"bus_id", "seat_no"})
-})
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

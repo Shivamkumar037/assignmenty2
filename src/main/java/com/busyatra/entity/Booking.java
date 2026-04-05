@@ -10,10 +10,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Booking Entity
- * Represents bus ticket bookings
- */
 @Entity
 @Table(name = "booking")
 @Data

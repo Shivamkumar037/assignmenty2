@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/**
- * Repository for Refund entity
- */
+
 @Repository
 public interface RefundRepository extends JpaRepository<Refund, Long> {
     

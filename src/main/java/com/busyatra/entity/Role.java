@@ -9,10 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-/**
- * Role Entity
- * Represents user roles: ADMIN, USER, DRIVER, CONDUCTOR
- */
+
 @Entity
 @Table(name = "role")
 @Data

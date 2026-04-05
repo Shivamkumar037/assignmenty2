@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repository for Bus entity
- */
+
 @Repository
 public interface BusRepository extends JpaRepository<Bus, Long> {
     

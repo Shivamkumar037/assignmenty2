@@ -10,10 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Route Entity
- * Represents bus routes between cities
- */
+
 @Entity
 @Table(name = "route")
 @Data

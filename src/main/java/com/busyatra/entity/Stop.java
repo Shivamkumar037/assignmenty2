@@ -10,10 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Stop Entity
- * Represents stops in a route
- */
+
 @Entity
 @Table(name = "stop")
 @Data

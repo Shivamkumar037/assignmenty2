@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/**
- * Repository for Cancellation entity
- */
+
 @Repository
 public interface CancellationRepository extends JpaRepository<Cancellation, Long> {
     

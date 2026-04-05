@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * Repository for Route entity
- */
+
 @Repository
 public interface RouteRepository extends JpaRepository<Route, Long> {
     
