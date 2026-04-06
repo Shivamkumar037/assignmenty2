@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Verify Payment Request DTO
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

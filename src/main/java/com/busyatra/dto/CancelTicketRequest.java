@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Cancel Ticket Request DTO
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

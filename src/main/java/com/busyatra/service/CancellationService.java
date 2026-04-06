@@ -14,10 +14,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-/**
- * Cancellation Service
- * Handles ticket cancellation and refund
- */
+
 @Service
 public class CancellationService {
 
@@ -39,49 +36,38 @@ public class CancellationService {
     @Autowired
     private EmailService emailService;
 
-    /**
-     * Cancel ticket
-     */
+
     @Transactional
     public Cancellation cancelTicket(CancelTicketRequest request) {
-        // Get booking
         Booking booking = bookingRepository.findByBookingId(request.getBookingId())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking", "bookingId", request.getBookingId()));
 
-        // Check if booking is already cancelled
         if ("CANCELLED".equals(booking.getBookingStatus())) {
             throw new BadRequestException("Booking is already cancelled");
         }
 
-        // Check if booking is confirmed
         if (!"CONFIRMED".equals(booking.getBookingStatus())) {
             throw new BadRequestException("Only confirmed bookings can be cancelled");
         }
 
-        // Calculate refund amount
         BigDecimal refundAmount = calculateRefund(booking);
 
-        // Create cancellation record
         Cancellation cancellation = new Cancellation();
         cancellation.setBooking(booking);
         cancellation.setRefundAmount(refundAmount);
         cancellation.setReason(request.getReason());
         cancellation = cancellationRepository.save(cancellation);
 
-        // Create refund record
         Refund refund = new Refund();
         refund.setCancellation(cancellation);
         refund.setRefundStatus("PENDING");
         refundRepository.save(refund);
 
-        // Update booking status
         booking.setBookingStatus("CANCELLED");
         bookingRepository.save(booking);
 
-        // Release seats
         releaseSeats(booking);
 
-        // Send cancellation email
         emailService.sendCancellationEmail(
                 booking.getUser().getEmail(),
                 booking.getBookingId(),
@@ -91,9 +77,7 @@ public class CancellationService {
         return cancellation;
     }
 
-    /**
-     * Calculate refund amount based on cancellation policy
-     */
+
     private BigDecimal calculateRefund(Booking booking) {
         LocalDate travelDate = booking.getSchedule().getTravelDay();
         LocalDate today = LocalDate.now();
@@ -124,15 +108,12 @@ public class CancellationService {
         return totalAmount.multiply(refundPercentage);
     }
 
-    /**
-     * Release seats after cancellation
-     */
+
     private void releaseSeats(Booking booking) {
         List<Passenger> passengers = passengerRepository.findByBooking(booking);
         Schedule schedule = booking.getSchedule();
 
         for (Passenger passenger : passengers) {
-            // Find seat availability and mark as available
             List<SeatAvailability> availabilities = seatAvailabilityRepository.findBySchedule(schedule);
             
             for (SeatAvailability availability : availabilities) {
@@ -145,9 +126,7 @@ public class CancellationService {
         }
     }
 
-    /**
-     * Get refund status
-     */
+
     public Refund getRefundStatus(String bookingId) {
         Booking booking = bookingRepository.findByBookingId(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking", "bookingId", bookingId));
@@ -159,9 +138,7 @@ public class CancellationService {
                 .orElseThrow(() -> new ResourceNotFoundException("Refund not found"));
     }
 
-    /**
-     * Process refund (Admin action)
-     */
+
     @Transactional
     public void processRefund(Long refundId, String transactionId) {
         Refund refund = refundRepository.findById(refundId)

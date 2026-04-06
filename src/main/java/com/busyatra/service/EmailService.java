@@ -6,10 +6,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-/**
- * Email Service
- * Handles email sending functionality
- */
+
 @Service
 public class EmailService {
 
@@ -22,9 +19,7 @@ public class EmailService {
     @Value("${app.name}")
     private String appName;
 
-    /**
-     * Send OTP email
-     */
+
     public void sendOtpEmail(String toEmail, String otp) {
         String subject = "OTP Verification - " + appName;
         String body = String.format(
@@ -39,9 +34,7 @@ public class EmailService {
         sendEmail(toEmail, subject, body);
     }
 
-    /**
-     * Send booking confirmation email
-     */
+
     public void sendBookingConfirmationEmail(String toEmail, String bookingId, String busNo) {
         String subject = "Booking Confirmation - " + appName;
         String body = String.format(
@@ -57,9 +50,7 @@ public class EmailService {
         sendEmail(toEmail, subject, body);
     }
 
-    /**
-     * Send cancellation email
-     */
+
     public void sendCancellationEmail(String toEmail, String bookingId, String refundAmount) {
         String subject = "Booking Cancellation - " + appName;
         String body = String.format(
@@ -75,9 +66,7 @@ public class EmailService {
         sendEmail(toEmail, subject, body);
     }
 
-    /**
-     * Generic email sender
-     */
+
     private void sendEmail(String to, String subject, String body) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -88,7 +77,6 @@ public class EmailService {
             mailSender.send(message);
         } catch (Exception e) {
             System.err.println("Failed to send email: " + e.getMessage());
-            // In production, log this error properly
         }
     }
 }

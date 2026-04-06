@@ -13,10 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-/**
- * Schedule Service
- * Handles bus schedule management
- */
+
 @Service
 public class ScheduleService {
 
@@ -35,26 +32,20 @@ public class ScheduleService {
     @Autowired
     private SeatAvailabilityRepository seatAvailabilityRepository;
 
-    /**
-     * Create new schedule
-     */
+
     @Transactional
     public Schedule createSchedule(CreateScheduleRequest request) {
-        // Get route
         Route route = routeRepository.findById(request.getRouteId())
                 .orElseThrow(() -> new ResourceNotFoundException("Route", "id", request.getRouteId()));
 
-        // Get bus
         Bus bus = busRepository.findById(request.getBusId())
                 .orElseThrow(() -> new ResourceNotFoundException("Bus", "id", request.getBusId()));
 
-        // Check if bus is already scheduled for this day
         List<Schedule> existingSchedules = scheduleRepository.findByBusAndTravelDay(bus, request.getTravelDay());
         if (!existingSchedules.isEmpty()) {
             throw new BadRequestException("Bus is already scheduled for this day");
         }
 
-        // Create schedule
         Schedule schedule = new Schedule();
         schedule.setRoute(route);
         schedule.setBus(bus);
@@ -63,18 +54,14 @@ public class ScheduleService {
         schedule.setEndTime(LocalTime.parse(request.getEndTime()));
         schedule.setTotalHours(request.getTotalHours());
 
-        // Save schedule
         schedule = scheduleRepository.save(schedule);
 
-        // Create seat availability for this schedule
         createSeatAvailability(schedule, bus);
 
         return schedule;
     }
 
-    /**
-     * Create seat availability for schedule
-     */
+
     private void createSeatAvailability(Schedule schedule, Bus bus) {
         List<Seat> seats = seatRepository.findByBus(bus);
         
@@ -88,9 +75,7 @@ public class ScheduleService {
         }
     }
 
-    /**
-     * Search schedules by route and date
-     */
+
     public List<Schedule> searchSchedules(Long routeId, LocalDate travelDate) {
         Route route = routeRepository.findById(routeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Route", "id", routeId));
@@ -98,24 +83,18 @@ public class ScheduleService {
         return scheduleRepository.findByRouteAndTravelDay(route, travelDate);
     }
 
-    /**
-     * Get today's schedules
-     */
+
     public List<Schedule> getTodaysSchedules() {
         return scheduleRepository.findByTravelDay(LocalDate.now());
     }
 
-    /**
-     * Get schedule by ID
-     */
+
     public Schedule getScheduleById(Long scheduleId) {
         return scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Schedule", "id", scheduleId));
     }
 
-    /**
-     * Get available seats for schedule
-     */
+
     public List<SeatAvailability> getAvailableSeats(Long scheduleId) {
         Schedule schedule = getScheduleById(scheduleId);
         return seatAvailabilityRepository.findByScheduleAndIsAvailable(schedule, true);

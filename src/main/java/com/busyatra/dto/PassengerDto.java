@@ -6,9 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Passenger DTO for booking
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

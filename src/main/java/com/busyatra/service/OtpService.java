@@ -12,10 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Random;
 
-/**
- * OTP Service
- * Handles OTP generation and validation
- */
+
 @Service
 public class OtpService {
 
@@ -28,30 +25,22 @@ public class OtpService {
     @Value("${app.otp.expiry.minutes}")
     private Integer otpExpiryMinutes;
 
-    /**
-     * Generate and send OTP
-     */
+
     @Transactional
     public void generateAndSendOtp(User user) {
-        // Generate 6-digit OTP
         String otpCode = generateOtpCode();
 
-        // Create OTP entity
         Otp otp = new Otp();
         otp.setUser(user);
         otp.setOtpCode(otpCode);
         otp.setExpiryTime(LocalDateTime.now().plusMinutes(otpExpiryMinutes));
 
-        // Save OTP
         otpRepository.save(otp);
 
-        // Send OTP via email
         emailService.sendOtpEmail(user.getEmail(), otpCode);
     }
 
-    /**
-     * Verify OTP
-     */
+
     @Transactional
     public boolean verifyOtp(User user, String otpCode) {
         Otp otp = otpRepository.findByUserAndOtpCodeAndExpiryTimeAfter(
@@ -59,7 +48,6 @@ public class OtpService {
         ).orElse(null);
 
         if (otp != null) {
-            // OTP is valid, delete it
             otpRepository.delete(otp);
             return true;
         }
@@ -67,18 +55,14 @@ public class OtpService {
         return false;
     }
 
-    /**
-     * Generate 6-digit OTP code
-     */
+
     private String generateOtpCode() {
         Random random = new Random();
         int otp = 100000 + random.nextInt(900000);
         return String.valueOf(otp);
     }
 
-    /**
-     * Clean expired OTPs
-     */
+
     @Transactional
     public void cleanExpiredOtps() {
         otpRepository.deleteByExpiryTimeBefore(LocalDateTime.now());

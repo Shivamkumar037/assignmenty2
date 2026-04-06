@@ -8,9 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * SignUp Request DTO
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

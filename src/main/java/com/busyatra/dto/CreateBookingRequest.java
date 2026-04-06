@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/**
- * Create Booking Request DTO
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

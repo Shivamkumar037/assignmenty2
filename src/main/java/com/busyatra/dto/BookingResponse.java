@@ -8,9 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Booking Response DTO
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

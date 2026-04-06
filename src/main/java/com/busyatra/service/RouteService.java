@@ -16,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Route Service
- * Handles route and stop management
- */
+
 @Service
 public class RouteService {
 
@@ -32,19 +29,15 @@ public class RouteService {
     @Autowired
     private StopRepository stopRepository;
 
-    /**
-     * Add new route
-     */
+
     @Transactional
     public Route addRoute(AddRouteRequest request) {
-        // Get cities
         City sourceCity = cityRepository.findById(request.getSourceCityId())
                 .orElseThrow(() -> new ResourceNotFoundException("City", "id", request.getSourceCityId()));
 
         City destinationCity = cityRepository.findById(request.getDestinationCityId())
                 .orElseThrow(() -> new ResourceNotFoundException("City", "id", request.getDestinationCityId()));
 
-        // Check if route already exists
         List<Route> existingRoutes = routeRepository.findBySourceCityAndDestinationCityAndStatus(
                 sourceCity, destinationCity, "ACTIVE");
         
@@ -52,7 +45,6 @@ public class RouteService {
             throw new BadRequestException("Route already exists between these cities");
         }
 
-        // Create route
         Route route = new Route();
         route.setSourceCity(sourceCity);
         route.setDestinationCity(destinationCity);
@@ -63,16 +55,12 @@ public class RouteService {
         return routeRepository.save(route);
     }
 
-    /**
-     * Add stop to route
-     */
+
     @Transactional
     public Stop addStop(AddStopRequest request) {
-        // Get route
         Route route = routeRepository.findById(request.getRouteId())
                 .orElseThrow(() -> new ResourceNotFoundException("Route", "id", request.getRouteId()));
 
-        // Create stop
         Stop stop = new Stop();
         stop.setRoute(route);
         stop.setStopName(request.getStopName());
@@ -83,23 +71,17 @@ public class RouteService {
         return stopRepository.save(stop);
     }
 
-    /**
-     * Get all routes
-     */
+
     public List<Route> getAllRoutes() {
         return routeRepository.findAll();
     }
 
-    /**
-     * Get active routes
-     */
+
     public List<Route> getActiveRoutes() {
         return routeRepository.findByStatus("ACTIVE");
     }
 
-    /**
-     * Search routes by source and destination
-     */
+
     public List<Route> searchRoutes(Long sourceCityId, Long destinationCityId) {
         City sourceCity = cityRepository.findById(sourceCityId)
                 .orElseThrow(() -> new ResourceNotFoundException("City", "id", sourceCityId));
@@ -111,9 +93,7 @@ public class RouteService {
                 sourceCity, destinationCity, "ACTIVE");
     }
 
-    /**
-     * Get stops for a route
-     */
+
     public List<Stop> getStopsForRoute(Long routeId) {
         Route route = routeRepository.findById(routeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Route", "id", routeId));

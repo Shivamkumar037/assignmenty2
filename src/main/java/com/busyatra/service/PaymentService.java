@@ -250,7 +250,6 @@ public class PaymentService {
             RazorpayClient razorpay = new RazorpayClient(razorpayKeyId, razorpayKeySecret);
 
             JSONObject orderRequest = new JSONObject();
-            // Amount in paise: BigDecimal to int conversion
             orderRequest.put("amount", request.getAmount().multiply(BigDecimal.valueOf(100)).intValue());
             orderRequest.put("currency", "INR");
             orderRequest.put("receipt", request.getBookingId());
@@ -262,7 +261,6 @@ public class PaymentService {
             payment.setAmount(request.getAmount());
             payment.setPaymentMethod(request.getPaymentMethod());
             payment.setPaymentStatus("PENDING");
-            // Explicitly calling toString() to avoid ambiguous method error
             payment.setTransactionId(order.get("id").toString());
             paymentRepository.save(payment);
 

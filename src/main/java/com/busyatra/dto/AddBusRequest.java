@@ -7,9 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Add Bus Request DTO
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-/**
- * Error Response structure
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -4,10 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-/**
- * Main Application Class for Bus Yatra
- * Bus Reservation System
- */
+
 @SpringBootApplication
 @EnableJpaAuditing
 public class BusYatraApplication {

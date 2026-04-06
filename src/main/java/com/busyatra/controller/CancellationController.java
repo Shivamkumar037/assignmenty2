@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Cancellation Controller
- * Handles ticket cancellation operations
- */
+
 @RestController
 @RequestMapping("/ticket")
 public class CancellationController {
@@ -21,9 +18,6 @@ public class CancellationController {
     @Autowired
     private CancellationService cancellationService;
 
-    /**
-     * Cancel ticket
-     */
     @PostMapping("/cancel")
     public ResponseEntity<ApiResponse> cancelTicket(@Valid @RequestBody CancelTicketRequest request) {
         Cancellation cancellation = cancellationService.cancelTicket(request);
@@ -32,9 +26,7 @@ public class CancellationController {
         );
     }
 
-    /**
-     * Get refund status
-     */
+
     @GetMapping("/refund/status/{bookingId}")
     public ResponseEntity<ApiResponse> getRefundStatus(@PathVariable String bookingId) {
         Refund refund = cancellationService.getRefundStatus(bookingId);

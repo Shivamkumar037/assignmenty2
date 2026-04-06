@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-/**
- * Add Stop Request DTO
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

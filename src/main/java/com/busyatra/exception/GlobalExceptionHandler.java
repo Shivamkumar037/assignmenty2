@@ -14,16 +14,11 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Global Exception Handler
- * Handles all exceptions across the application
- */
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /**
-     * Handle Resource Not Found Exception
-     */
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
             ResourceNotFoundException ex,
@@ -40,9 +35,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    /**
-     * Handle Bad Request Exception
-     */
+
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(
             BadRequestException ex,
@@ -59,9 +52,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * Handle Unauthorized Exception
-     */
+
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ErrorResponse> handleUnauthorizedException(
             UnauthorizedException ex,
@@ -78,9 +69,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
-    /**
-     * Handle Bad Credentials Exception
-     */
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleBadCredentialsException(
             BadCredentialsException ex,
@@ -97,9 +85,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
-    /**
-     * Handle Access Denied Exception
-     */
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(
             AccessDeniedException ex,
@@ -116,9 +102,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
-    /**
-     * Handle Validation Exceptions
-     */
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(
             MethodArgumentNotValidException ex,
@@ -141,9 +125,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * Handle All Other Exceptions
-     */
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(
             Exception ex,

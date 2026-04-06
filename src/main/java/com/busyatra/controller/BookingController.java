@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Booking Controller
- * Handles booking operations
- */
+
 @RestController
 @RequestMapping("/booking")
 public class BookingController {
@@ -24,9 +21,7 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
-    /**
-     * Create booking
-     */
+
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createBooking(
             @Valid @RequestBody CreateBookingRequest request,
@@ -39,9 +34,7 @@ public class BookingController {
         );
     }
 
-    /**
-     * Get user bookings
-     */
+
     @GetMapping("/user")
     public ResponseEntity<ApiResponse> getUserBookings(Authentication authentication) {
         String userEmail = authentication.getName();
@@ -51,9 +44,7 @@ public class BookingController {
         );
     }
 
-    /**
-     * Get booking by ID
-     */
+
     @GetMapping("/{bookingId}")
     public ResponseEntity<ApiResponse> getBookingById(@PathVariable String bookingId) {
         BookingResponse booking = bookingService.getBookingById(bookingId);

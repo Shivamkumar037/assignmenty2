@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Generic API Response
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

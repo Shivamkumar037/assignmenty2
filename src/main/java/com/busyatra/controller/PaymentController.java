@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Payment Controller
- * Handles payment operations
- */
+
 @RestController
 @RequestMapping("/payment")
 public class PaymentController {
@@ -21,9 +18,8 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
-    /**
-     * Create payment order
-     */
+
+
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createPaymentOrder(@Valid @RequestBody CreatePaymentRequest request) {
         JSONObject order = paymentService.createPaymentOrder(request);
@@ -32,9 +28,7 @@ public class PaymentController {
         );
     }
 
-    /**
-     * Verify payment
-     */
+
     @PostMapping("/verify")
     public ResponseEntity<ApiResponse> verifyPayment(@Valid @RequestBody VerifyPaymentRequest request) {
         paymentService.verifyPayment(request);
