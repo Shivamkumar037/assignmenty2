@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
-@PreAuthorize("hasRole('ADMIN')")
+@RequestMapping("/user")
+@PreAuthorize("hasRole('USER')")
 @RequiredArgsConstructor
-public class AdminController {
+public class UserController {
 
     private final EmployeeService employeeService;
 
@@ -48,13 +48,5 @@ public class AdminController {
 
         Employee updatedEmployee = employeeService.updateEmployee(employee);
         return ResponseEntity.ok(updatedEmployee);
-    }
-
-    @DeleteMapping("/employees/{id}")
-    public ResponseEntity<Employee> deleteEmployee(
-            @PathVariable Integer id) {
-
-        Employee deletedEmployee = employeeService.deleteEmployee(id);
-        return ResponseEntity.ok(deletedEmployee);
     }
 }

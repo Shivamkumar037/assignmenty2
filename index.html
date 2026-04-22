@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BuSyatra – Employee Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0d0f1a;--surface:#141726;--surface2:#1c2035;--surface3:#232740;
+    --border:#2a2f4a;--border2:#363c5e;
+    --accent:#5b6af0;--accent-h:#7b89ff;--accent-dim:#2a2f4a;
+    --green:#22c981;--green-dim:#0d2b1e;
+    --red:#f05b5b;--red-dim:#2b0d0d;
+    --yellow:#f0c05b;--yellow-dim:#2b220d;
+    --text:#e8eaf6;--text2:#8b90b8;--text3:#555b80;
+    --radius:12px;--radius-sm:8px;
+  }
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+  h1,h2,h3{font-family:'Syne',sans-serif}
+
+  /* ── AUTH SCREENS ─────────────────────────────── */
+  #auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;
+    background:radial-gradient(ellipse 80% 60% at 50% 0%, #1e2456 0%, var(--bg) 70%)}
+  .auth-card{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.5rem}
+  .logo{display:flex;align-items:center;gap:10px;margin-bottom:2rem}
+  .logo-mark{width:36px;height:36px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center}
+  .logo-mark svg{width:20px;height:20px;fill:#fff}
+  .logo h1{font-size:1.4rem;font-weight:700;letter-spacing:-0.5px}
+  .logo span{color:var(--text2);font-size:.75rem;font-weight:400;display:block;margin-top:-2px}
+  .auth-tabs{display:flex;border-radius:var(--radius-sm);background:var(--surface2);padding:4px;margin-bottom:1.8rem;gap:4px}
+  .auth-tab{flex:1;padding:.5rem;border:none;background:transparent;color:var(--text2);border-radius:6px;cursor:pointer;font-size:.875rem;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .2s}
+  .auth-tab.active{background:var(--accent);color:#fff}
+  .field{margin-bottom:1rem}
+  .field label{display:block;font-size:.8rem;color:var(--text2);margin-bottom:.4rem;font-weight:500}
+  .field input{width:100%;padding:.7rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:.9rem;font-family:inherit;outline:none;transition:border-color .2s}
+  .field input:focus{border-color:var(--accent)}
+  .field input::placeholder{color:var(--text3)}
+  .btn{width:100%;padding:.75rem;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:.95rem;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer;transition:background .2s,transform .1s;margin-top:.5rem}
+  .btn:hover{background:var(--accent-h)}
+  .btn:active{transform:scale(0.98)}
+  .btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text)}
+  .btn-outline:hover{background:var(--surface2);border-color:var(--accent)}
+  .btn-danger{background:var(--red)}
+  .btn-danger:hover{background:#ff7070}
+  .btn-sm{width:auto;padding:.4rem .9rem;font-size:.8rem;border-radius:6px;margin-top:0}
+  .error-msg{color:var(--red);font-size:.8rem;margin-top:.8rem;text-align:center}
+  .success-msg{color:var(--green);font-size:.8rem;margin-top:.8rem;text-align:center}
+
+  /* ── APP SHELL ────────────────────────────────── */
+  #app-screen{display:none;min-height:100vh;flex-direction:column}
+  .topbar{height:58px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.5rem;gap:1rem;position:sticky;top:0;z-index:100}
+  .topbar-logo{display:flex;align-items:center;gap:8px;flex:none}
+  .topbar-logo .logo-mark{width:28px;height:28px;font-size:.7rem;border-radius:8px}
+  .topbar-logo h2{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700}
+  .topbar-spacer{flex:1}
+  .badge{padding:.2rem .6rem;border-radius:20px;font-size:.7rem;font-weight:600;font-family:'Syne',sans-serif;text-transform:uppercase;letter-spacing:.05em}
+  .badge-admin{background:#3b1e6e;color:#c4a8ff}
+  .badge-user{background:#1a2f6e;color:#a8c4ff}
+  .user-info{font-size:.85rem;color:var(--text2)}
+  .btn-logout{width:auto;padding:.4rem .9rem;font-size:.8rem;border-radius:6px;margin-top:0;background:transparent;border:1px solid var(--border2);color:var(--text2)}
+  .btn-logout:hover{background:var(--red-dim);border-color:var(--red);color:var(--red)}
+
+  /* ── LAYOUT ───────────────────────────────────── */
+  .app-body{display:flex;flex:1}
+  .sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);padding:1.2rem .8rem;flex:none;min-height:calc(100vh - 58px)}
+  .nav-section{margin-bottom:1.5rem}
+  .nav-label{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;padding:0 .6rem;margin-bottom:.4rem;font-weight:600}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:.55rem .6rem;border-radius:var(--radius-sm);cursor:pointer;font-size:.875rem;color:var(--text2);transition:all .2s;border:none;background:transparent;width:100%;font-family:inherit;text-align:left}
+  .nav-item:hover{background:var(--surface2);color:var(--text)}
+  .nav-item.active{background:var(--accent-dim);color:var(--accent-h)}
+  .nav-icon{width:16px;height:16px;opacity:.7;flex:none}
+  .nav-item.active .nav-icon{opacity:1}
+  .content{flex:1;padding:1.8rem;overflow:auto}
+
+  /* ── PANELS ───────────────────────────────────── */
+  .panel{display:none}
+  .panel.active{display:block}
+  .panel-title{font-size:1.35rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:.75rem}
+  .panel-title svg{width:20px;height:20px;opacity:.7}
+
+  /* ── CARDS ────────────────────────────────────── */
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-bottom:1.8rem}
+  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem}
+  .stat-val{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:700;line-height:1}
+  .stat-lbl{font-size:.75rem;color:var(--text2);margin-top:.4rem}
+
+  /* ── TABLE ────────────────────────────────────── */
+  .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  .table-header{padding:1rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+  .table-title{font-size:.9rem;font-weight:600;font-family:'Syne',sans-serif}
+  table{width:100%;border-collapse:collapse}
+  th{padding:.7rem 1.2rem;text-align:left;font-size:.75rem;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);background:var(--surface2)}
+  td{padding:.8rem 1.2rem;font-size:.875rem;border-bottom:1px solid var(--border);color:var(--text)}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:var(--surface2)}
+  .td-actions{display:flex;gap:.5rem}
+
+  /* ── FORM CARD ────────────────────────────────── */
+  .form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;max-width:500px}
+  .form-card h3{font-size:1rem;margin-bottom:1.2rem;font-family:'Syne',sans-serif}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+  .form-actions{display:flex;gap:.8rem;margin-top:.5rem}
+  .form-actions .btn{width:auto;padding:.6rem 1.4rem;font-size:.875rem}
+
+  /* ── ALERT ────────────────────────────────────── */
+  .alert{padding:.8rem 1rem;border-radius:var(--radius-sm);font-size:.875rem;margin-bottom:1rem;display:none}
+  .alert.show{display:block}
+  .alert-success{background:var(--green-dim);border:1px solid var(--green);color:var(--green)}
+  .alert-error{background:var(--red-dim);border:1px solid var(--red);color:var(--red)}
+  .alert-info{background:var(--accent-dim);border:1px solid var(--accent);color:var(--accent-h)}
+
+  /* ── EMPTY STATE ──────────────────────────────── */
+  .empty{text-align:center;padding:3rem;color:var(--text3)}
+  .empty svg{width:40px;height:40px;margin-bottom:1rem;opacity:.3}
+  .empty p{font-size:.9rem}
+
+  /* ── SPINNER ──────────────────────────────────── */
+  .spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading{display:flex;align-items:center;justify-content:center;padding:3rem;color:var(--text2);font-size:.875rem}
+
+  /* ── MODAL ────────────────────────────────────── */
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:1rem}
+  .modal-bg.show{display:flex}
+  .modal{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:1.8rem;width:100%;max-width:420px}
+  .modal h3{font-family:'Syne',sans-serif;font-size:1.1rem;margin-bottom:1.2rem}
+  .modal-actions{display:flex;gap:.8rem;justify-content:flex-end;margin-top:1rem}
+  .modal-actions .btn{width:auto;padding:.55rem 1.2rem;font-size:.875rem}
+
+  /* ── RESPONSIVE ───────────────────────────────── */
+  @media(max-width:700px){
+    .sidebar{display:none}
+    .form-row{grid-template-columns:1fr}
+    .stat-grid{grid-template-columns:1fr 1fr}
+  }
+  input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- ══ AUTH SCREEN ══════════════════════════════════════ -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div><h1>BuSyatra</h1><span>Employee Management Portal</span></div>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Login</button>
+      <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="tab-login">
+      <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="you@example.com"/></div>
+      <div class="field"><label>Password</label><input type="password" id="login-pass" placeholder="••••••"/></div>
+      <div id="login-msg"></div>
+      <button class="btn" onclick="doLogin()">Sign In</button>
+    </div>
+
+    <!-- SIGNUP -->
+    <div id="tab-signup" class="hidden">
+      <div class="field"><label>Full Name</label><input type="text" id="su-name" placeholder="Ravi Kumar"/></div>
+      <div class="field"><label>Email</label><input type="email" id="su-email" placeholder="you@example.com"/></div>
+      <div class="field"><label>Password</label><input type="password" id="su-pass" placeholder="min 6 characters"/></div>
+      <div class="field"><label>Mobile Number (10 digits)</label><input type="text" id="su-mobile" placeholder="9876543210" maxlength="10"/></div>
+      <div class="field"><label>Aadhaar Number (12 digits, optional)</label><input type="text" id="su-aadhaar" placeholder="123456789012" maxlength="12"/></div>
+      <div id="su-msg"></div>
+      <button class="btn" onclick="doSignup()">Create Account</button>
+    </div>
+
+    <p style="text-align:center;font-size:.75rem;color:var(--text3);margin-top:1.5rem">
+      API: <input id="api-url" value="http://localhost:8080/api" style="background:transparent;border:none;color:var(--text3);font-size:.75rem;outline:none;text-align:center;width:160px"/>
+    </p>
+  </div>
+</div>
+
+<!-- ══ APP SCREEN ════════════════════════════════════════ -->
+<div id="app-screen">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <h2>BuSyatra</h2>
+    </div>
+    <div class="topbar-spacer"></div>
+    <span class="user-info" id="topbar-name"></span>
+    <span class="badge" id="topbar-badge"></span>
+    <button class="btn btn-logout" onclick="logout()">Log out</button>
+  </div>
+
+  <div class="app-body">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="nav-section">
+        <div class="nav-label">Overview</div>
+        <button class="nav-item active" onclick="showPanel('dashboard')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Employees</div>
+        <button class="nav-item" onclick="showPanel('all-emp')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          All Employees
+        </button>
+        <button class="nav-item" onclick="showPanel('find-emp')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          Find by ID
+        </button>
+        <button class="nav-item" onclick="showPanel('add-emp')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          Add Employee
+        </button>
+        <button class="nav-item" onclick="showPanel('edit-emp')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Update Employee
+        </button>
+        <button class="nav-item hidden" id="nav-delete" onclick="showPanel('del-emp')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          Delete Employee
+        </button>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="content">
+
+      <!-- DASHBOARD -->
+      <div class="panel active" id="panel-dashboard">
+        <div class="panel-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-val" id="dash-count">—</div>
+            <div class="stat-lbl">Total Employees</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" id="dash-role">—</div>
+            <div class="stat-lbl">Your Role</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-val" id="dash-user">—</div>
+            <div class="stat-lbl">Logged in as</div>
+          </div>
+        </div>
+        <div class="alert alert-info show" style="max-width:500px">
+          Welcome! Use the sidebar to manage employees. Admin users have extra delete privileges.
+        </div>
+      </div>
+
+      <!-- ALL EMPLOYEES -->
+      <div class="panel" id="panel-all-emp">
+        <div class="panel-title">All Employees</div>
+        <div class="alert" id="all-alert"></div>
+        <div class="table-wrap">
+          <div class="table-header">
+            <span class="table-title">Employee List</span>
+            <button class="btn btn-sm btn-outline" onclick="loadAllEmployees()">↻ Refresh</button>
+          </div>
+          <div id="emp-table-body">
+            <div class="loading"><span class="spinner"></span>Loading…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FIND BY ID -->
+      <div class="panel" id="panel-find-emp">
+        <div class="panel-title">Find Employee by ID</div>
+        <div class="form-card">
+          <h3>Enter Employee ID</h3>
+          <div class="field"><label>Employee ID</label><input type="number" id="find-id" placeholder="e.g. 1"/></div>
+          <div class="alert" id="find-alert"></div>
+          <div class="form-actions">
+            <button class="btn" onclick="findEmployee()">Search</button>
+          </div>
+        </div>
+        <div id="find-result" style="margin-top:1.2rem"></div>
+      </div>
+
+      <!-- ADD EMPLOYEE -->
+      <div class="panel" id="panel-add-emp">
+        <div class="panel-title">Add New Employee</div>
+        <div class="form-card">
+          <h3>Employee Details</h3>
+          <div class="form-row">
+            <div class="field"><label>First Name</label><input type="text" id="add-fn" placeholder="Ravi"/></div>
+            <div class="field"><label>Last Name</label><input type="text" id="add-ln" placeholder="Kumar"/></div>
+          </div>
+          <div class="field"><label>Email</label><input type="email" id="add-email" placeholder="ravi@company.com"/></div>
+          <div class="field"><label>Salary (₹)</label><input type="number" id="add-sal" placeholder="50000"/></div>
+          <div class="alert" id="add-alert"></div>
+          <div class="form-actions">
+            <button class="btn" onclick="addEmployee()">Add Employee</button>
+            <button class="btn btn-outline" onclick="clearAddForm()">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- UPDATE EMPLOYEE -->
+      <div class="panel" id="panel-edit-emp">
+        <div class="panel-title">Update Employee</div>
+        <div class="form-card">
+          <h3>Employee Details</h3>
+          <div class="field"><label>Employee ID (required)</label><input type="number" id="edit-id" placeholder="Enter ID to update"/></div>
+          <div class="form-row">
+            <div class="field"><label>First Name</label><input type="text" id="edit-fn" placeholder="Ravi"/></div>
+            <div class="field"><label>Last Name</label><input type="text" id="edit-ln" placeholder="Kumar"/></div>
+          </div>
+          <div class="field"><label>Email</label><input type="email" id="edit-email" placeholder="ravi@company.com"/></div>
+          <div class="field"><label>Salary (₹)</label><input type="number" id="edit-sal" placeholder="60000"/></div>
+          <div class="alert" id="edit-alert"></div>
+          <div class="form-actions">
+            <button class="btn" onclick="updateEmployee()">Update Employee</button>
+            <button class="btn btn-outline" onclick="clearEditForm()">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DELETE EMPLOYEE (ADMIN ONLY) -->
+      <div class="panel" id="panel-del-emp">
+        <div class="panel-title" style="color:var(--red)">Delete Employee</div>
+        <div class="form-card" style="border-color:var(--red);border-opacity:.5">
+          <h3>⚠ Permanent Deletion</h3>
+          <div class="field"><label>Employee ID</label><input type="number" id="del-id" placeholder="Enter ID to delete"/></div>
+          <div class="alert" id="del-alert"></div>
+          <div class="form-actions">
+            <button class="btn btn-danger" onclick="openDeleteModal()">Delete Employee</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-bg" id="delete-modal">
+  <div class="modal">
+    <h3>Confirm Deletion</h3>
+    <p style="color:var(--text2);font-size:.875rem">Are you sure you want to permanently delete employee ID <strong id="modal-del-id" style="color:var(--red)"></strong>? This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteEmployee()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ───────────────────────────────────────────────
+let token = '', role = '', userName = '';
+const BASE = () => document.getElementById('api-url').value.replace(/\/$/, '');
+
+// ── HELPERS ─────────────────────────────────────────────
+function api(path, method='GET', body=null) {
+  const h = {'Content-Type':'application/json'};
+  if (token) h['Authorization'] = 'Bearer ' + token;
+  return fetch(BASE() + path, {method, headers:h, body: body ? JSON.stringify(body) : null});
+}
+function showMsg(el, msg, type='error') {
+  el.textContent = msg;
+  el.className = type === 'error' ? 'error-msg' : 'success-msg';
+}
+function showAlert(id, msg, type='error') {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = 'alert show ' + (type === 'error' ? 'alert-error' : type === 'success' ? 'alert-success' : 'alert-info');
+  setTimeout(() => el.className = 'alert', 4000);
+}
+
+// ── AUTH TABS ────────────────────────────────────────────
+function switchTab(t) {
+  document.querySelectorAll('.auth-tab').forEach((el,i) => el.classList.toggle('active', (i===0 && t==='login') || (i===1 && t==='signup')));
+  document.getElementById('tab-login').classList.toggle('hidden', t !== 'login');
+  document.getElementById('tab-signup').classList.toggle('hidden', t !== 'signup');
+}
+
+// ── LOGIN ─────────────────────────────────────────────────
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-pass').value;
+  const msg = document.getElementById('login-msg');
+  if (!email || !password) { showMsg(msg, 'Please fill all fields'); return; }
+  msg.textContent = ''; showMsg(msg, 'Signing in…', 'success');
+  try {
+    const res = await api('/auth/login', 'POST', {email, password});
+    const data = await res.json();
+    if (!res.ok) { showMsg(msg, data.message || 'Login failed'); return; }
+    token = data.token;
+    role = data.role || 'USER';
+    userName = data.name || email;
+    startApp();
+  } catch(e) { showMsg(msg, 'Cannot reach server. Check API URL.'); }
+}
+
+// ── SIGNUP ────────────────────────────────────────────────
+async function doSignup() {
+  const payload = {
+    name: document.getElementById('su-name').value.trim(),
+    email: document.getElementById('su-email').value.trim(),
+    password: document.getElementById('su-pass').value,
+    mobileNo: document.getElementById('su-mobile').value.trim(),
+    aadhaarNo: document.getElementById('su-aadhaar').value.trim() || undefined,
+  };
+  const msg = document.getElementById('su-msg');
+  if (!payload.name || !payload.email || !payload.password || !payload.mobileNo) { showMsg(msg, 'Please fill all required fields'); return; }
+  showMsg(msg, 'Creating account…', 'success');
+  try {
+    const res = await api('/auth/signup', 'POST', payload);
+    const data = await res.json();
+    if (!res.ok) { showMsg(msg, data.message || 'Signup failed'); return; }
+    showMsg(msg, 'Account created! Please log in.', 'success');
+    setTimeout(() => switchTab('login'), 1500);
+  } catch(e) { showMsg(msg, 'Cannot reach server. Check API URL.'); }
+}
+
+// ── START APP ─────────────────────────────────────────────
+function startApp() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'flex';
+  document.getElementById('topbar-name').textContent = userName;
+  const badge = document.getElementById('topbar-badge');
+  badge.textContent = role;
+  badge.className = 'badge ' + (role === 'ADMIN' ? 'badge-admin' : 'badge-user');
+  document.getElementById('dash-role').textContent = role;
+  document.getElementById('dash-user').textContent = userName;
+  if (role === 'ADMIN') document.getElementById('nav-delete').classList.remove('hidden');
+  loadAllEmployees();
+}
+
+// ── LOGOUT ────────────────────────────────────────────────
+function logout() {
+  token = ''; role = ''; userName = '';
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('nav-delete').classList.add('hidden');
+}
+
+// ── NAVIGATION ────────────────────────────────────────────
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  event && event.currentTarget && event.currentTarget.classList.add('active');
+  if (name === 'all-emp') loadAllEmployees();
+  if (name === 'dashboard') loadDashboard();
+}
+
+// ── EMPLOYEE ENDPOINT PREFIX ──────────────────────────────
+const empPath = () => role === 'ADMIN' ? '/admin/employees' : '/user/employees';
+
+// ── LOAD ALL ──────────────────────────────────────────────
+async function loadAllEmployees() {
+  const body = document.getElementById('emp-table-body');
+  body.innerHTML = '<div class="loading"><span class="spinner"></span>Loading employees…</div>';
+  try {
+    const res = await api(empPath());
+    if (!res.ok) { body.innerHTML = '<div class="empty"><p>Failed to load employees ('+res.status+')</p></div>'; return; }
+    const data = await res.json();
+    document.getElementById('dash-count').textContent = data.length;
+    if (!data.length) { body.innerHTML = '<div class="empty"><p>No employees found.</p></div>'; return; }
+    const isAdmin = role === 'ADMIN';
+    body.innerHTML = `<table>
+      <thead><tr>
+        <th>ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Salary</th>
+        ${isAdmin ? '<th>Actions</th>' : ''}
+      </tr></thead>
+      <tbody>${data.map(e => `<tr>
+        <td>${e.id}</td>
+        <td>${e.firstname||'—'}</td>
+        <td>${e.lastname||'—'}</td>
+        <td style="color:var(--accent-h)">${e.email||'—'}</td>
+        <td>₹${Number(e.salary||0).toLocaleString('en-IN')}</td>
+        ${isAdmin ? `<td><div class="td-actions">
+          <button class="btn btn-sm btn-outline" onclick="prefillEdit(${e.id},'${e.firstname||''}','${e.lastname||''}','${e.email||''}',${e.salary||0})">Edit</button>
+          <button class="btn btn-sm btn-danger" onclick="quickDelete(${e.id})">Del</button>
+        </div></td>` : ''}
+      </tr>`).join('')}</tbody>
+    </table>`;
+  } catch(e) { body.innerHTML = '<div class="empty"><p>Network error. Check API URL and CORS.</p></div>'; }
+}
+
+async function loadDashboard() {
+  try {
+    const res = await api(empPath());
+    if (res.ok) { const d = await res.json(); document.getElementById('dash-count').textContent = d.length; }
+  } catch(e) {}
+}
+
+// ── FIND BY ID ────────────────────────────────────────────
+async function findEmployee() {
+  const id = document.getElementById('find-id').value;
+  if (!id) { showAlert('find-alert', 'Please enter an ID'); return; }
+  try {
+    const res = await api(empPath() + '/' + id);
+    if (!res.ok) { showAlert('find-alert', 'Employee not found ('+res.status+')'); document.getElementById('find-result').innerHTML=''; return; }
+    const e = await res.json();
+    document.getElementById('find-result').innerHTML = `
+      <div class="form-card" style="display:flex;gap:1rem;flex-wrap:wrap;max-width:600px">
+        <div style="flex:none;width:56px;height:56px;border-radius:50%;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-size:1.2rem;font-weight:700;color:var(--accent-h)">
+          ${(e.firstname||'?')[0].toUpperCase()}${(e.lastname||'?')[0].toUpperCase()}
+        </div>
+        <div style="flex:1;min-width:180px">
+          <div style="font-family:Syne,sans-serif;font-size:1.1rem;font-weight:600">${e.firstname||''} ${e.lastname||''}</div>
+          <div style="color:var(--accent-h);font-size:.85rem">${e.email||''}</div>
+          <div style="display:flex;gap:1.5rem;margin-top:.8rem;font-size:.85rem;color:var(--text2)">
+            <span>ID: <strong style="color:var(--text)">${e.id}</strong></span>
+            <span>Salary: <strong style="color:var(--green)">₹${Number(e.salary||0).toLocaleString('en-IN')}</strong></span>
+          </div>
+        </div>
+      </div>`;
+    showAlert('find-alert','Employee found!','success');
+  } catch(e) { showAlert('find-alert','Network error'); }
+}
+
+// ── ADD EMPLOYEE ──────────────────────────────────────────
+async function addEmployee() {
+  const emp = {
+    firstname: document.getElementById('add-fn').value.trim(),
+    lastname: document.getElementById('add-ln').value.trim(),
+    email: document.getElementById('add-email').value.trim(),
+    salary: parseFloat(document.getElementById('add-sal').value) || 0,
+  };
+  if (!emp.firstname || !emp.email) { showAlert('add-alert','First name and email are required'); return; }
+  try {
+    const res = await api(empPath(), 'POST', emp);
+    const d = await res.json();
+    if (!res.ok) { showAlert('add-alert', d.message || 'Failed to add employee'); return; }
+    showAlert('add-alert', `Employee "${d.firstname} ${d.lastname}" added (ID: ${d.id})`, 'success');
+    clearAddForm();
+  } catch(e) { showAlert('add-alert','Network error'); }
+}
+function clearAddForm() {
+  ['add-fn','add-ln','add-email','add-sal'].forEach(id => document.getElementById(id).value='');
+}
+
+// ── UPDATE EMPLOYEE ───────────────────────────────────────
+async function updateEmployee() {
+  const id = parseInt(document.getElementById('edit-id').value);
+  if (!id) { showAlert('edit-alert','Employee ID is required'); return; }
+  const emp = {
+    id,
+    firstname: document.getElementById('edit-fn').value.trim(),
+    lastname: document.getElementById('edit-ln').value.trim(),
+    email: document.getElementById('edit-email').value.trim(),
+    salary: parseFloat(document.getElementById('edit-sal').value) || 0,
+  };
+  if (!emp.firstname || !emp.email) { showAlert('edit-alert','First name and email are required'); return; }
+  try {
+    const res = await api(empPath(), 'PUT', emp);
+    const d = await res.json();
+    if (!res.ok) { showAlert('edit-alert', d.message || 'Update failed'); return; }
+    showAlert('edit-alert', `Employee ID ${d.id} updated successfully!`, 'success');
+  } catch(e) { showAlert('edit-alert','Network error'); }
+}
+function clearEditForm() {
+  ['edit-id','edit-fn','edit-ln','edit-email','edit-sal'].forEach(id => document.getElementById(id).value='');
+}
+function prefillEdit(id,fn,ln,email,sal) {
+  showPanel('edit-emp');
+  document.getElementById('edit-id').value = id;
+  document.getElementById('edit-fn').value = fn;
+  document.getElementById('edit-ln').value = ln;
+  document.getElementById('edit-email').value = email;
+  document.getElementById('edit-sal').value = sal;
+}
+
+// ── DELETE EMPLOYEE ───────────────────────────────────────
+function openDeleteModal() {
+  const id = document.getElementById('del-id').value;
+  if (!id) { showAlert('del-alert','Please enter an employee ID'); return; }
+  document.getElementById('modal-del-id').textContent = id;
+  document.getElementById('delete-modal').classList.add('show');
+}
+function closeDeleteModal() { document.getElementById('delete-modal').classList.remove('show'); }
+async function deleteEmployee() {
+  const id = document.getElementById('del-id').value;
+  closeDeleteModal();
+  try {
+    const res = await api('/admin/employees/' + id, 'DELETE');
+    if (!res.ok) { showAlert('del-alert','Delete failed ('+res.status+')'); return; }
+    showAlert('del-alert', `Employee ID ${id} deleted.`, 'success');
+    document.getElementById('del-id').value = '';
+  } catch(e) { showAlert('del-alert','Network error'); }
+}
+async function quickDelete(id) {
+  document.getElementById('del-id').value = id;
+  openDeleteModal();
+}
+
+// Init nav click tracking
+document.querySelectorAll('.nav-item').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

@@ -36,8 +36,7 @@ public class AuthService {
     @Autowired
     private JwtTokenProvider tokenProvider;
 
-    @Autowired
-    private OtpService otpService;
+
 
 
     @Transactional
@@ -65,7 +64,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        otpService.generateAndSendOtp(user);
+
 
         return new ApiResponse(true, "Registration successful! Please verify your email with OTP.");
     }
@@ -96,35 +95,7 @@ public class AuthService {
     }
 
 
-    @Transactional
-    public ApiResponse verifyOtp(OtpVerificationRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "email", request.getEmail()));
-
-        boolean isValid = otpService.verifyOtp(user, request.getOtpCode());
-
-        if (!isValid) {
-            throw new BadRequestException("Invalid or expired OTP");
-        }
-
-        user.setIsVerified(true);
-        userRepository.save(user);
-
-        return new ApiResponse(true, "Email verified successfully! You can now login.");
-    }
 
 
-    @Transactional
-    public ApiResponse resendOtp(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
 
-        if (user.getIsVerified()) {
-            throw new BadRequestException("Email is already verified");
-        }
-
-        otpService.generateAndSendOtp(user);
-
-        return new ApiResponse(true, "OTP sent successfully to your email");
-    }
 }

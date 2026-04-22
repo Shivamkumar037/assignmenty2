@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Collections;
 
-/**
- * Custom User Details Service
- * Loads user-specific data for authentication
- */
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -39,9 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         );
     }
 
-    /**
-     * Get user authorities based on role
-     */
+
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {
         return Collections.singletonList(
                 new SimpleGrantedAuthority("ROLE_" + user.getRole().getRoleName())

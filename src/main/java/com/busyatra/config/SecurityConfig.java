@@ -126,8 +126,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/driver/**").hasRole("DRIVER")
-                        .requestMatchers("/conductor/**").hasRole("CONDUCTOR")
+                        .requestMatchers("/user/**").hasRole("USER")
+
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())

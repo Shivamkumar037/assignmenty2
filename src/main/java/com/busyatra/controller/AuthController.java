@@ -31,17 +31,4 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-
-    @PostMapping("/verify-otp")
-    public ResponseEntity<ApiResponse> verifyOtp(@Valid @RequestBody OtpVerificationRequest request) {
-        ApiResponse response = authService.verifyOtp(request);
-        return ResponseEntity.ok(response);
-    }
-
-
-    @PostMapping("/resend-otp")
-    public ResponseEntity<ApiResponse> resendOtp(@RequestParam String email) {
-        ApiResponse response = authService.resendOtp(email);
-        return ResponseEntity.ok(response);
-    }
 }
